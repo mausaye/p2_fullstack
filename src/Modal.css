@@ -1,0 +1,28 @@
+.form-control {
+    display: block;
+    font-size: 11px;
+    padding: 4px 2px;
+    border: solid 1px #aacfe4;
+    width: 80%; /* Adjust the width as needed */
+    margin: 2px auto 20px; /* Center the input boxes horizontally and add margin at the top and bottom */
+}
+
+.modal .btn {
+    display: block;
+    margin: auto;
+}
+
+#priority {
+    display: block;
+    align-items: center;
+}
+
+#popUp {
+    max-width: 35%;
+    width: 300px;
+    margin: auto;
+}
+
+.btn {
+    float: right;
+}
