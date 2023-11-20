@@ -49,7 +49,6 @@ export const Modal = ({ rows, edit_helper, setRowToEdit, editing, onEditing, ope
 
     }
 
-
     const handleChange = (e) => {
         console.log(e.target.name)
         if (e.target.name === "priority") {
@@ -121,7 +120,8 @@ export const Modal = ({ rows, edit_helper, setRowToEdit, editing, onEditing, ope
 
     return (
         <div className="card" id="popUp">
-            <div className="card-header bg-primary text-white">Add Task</div>
+            <div className="card-header bg-primary text-white">
+                {(editing)? "Edit Task": "Add Task"}</div>
             <div className="card-body">
                 <form id="form">
                     {(!editing) && <div className="form-group">
@@ -156,12 +156,12 @@ export const Modal = ({ rows, edit_helper, setRowToEdit, editing, onEditing, ope
                     <div id="buttons">
                         {(editing) ?
                             <>
-                                <button className="btn btn-danger col-5" onClick={reset} id="cancelButton" type="button">Cancel</button>
-                                <button className="btn btn-primary col-5" type="button" onClick={onUpdate} id="editButton" > Edit</button>
+                                <button className="btn btn-danger col-6" onClick={reset} id="cancelButton" type="button"><i class="fa fa-ban"></i> Cancel</button>
+                                <button className="btn btn-primary col-5" id="editButton" type="button" onClick={onUpdate}><i class="fa fa-pencil"></i>  Edit</button>
                             </> :
                             <>
-                                <button className="btn btn-danger col-5" onClick={closeModal} id="cancelButton" type="button">Cancel</button>
-                                <button onClick={validate} className="btn btn-primary col-5" type="button" id="addButton" > Add</button>
+                                <button className="btn btn-danger col-6" onClick={closeModal} id="cancelButton" type="button"> <i class="fa fa-ban"></i> Cancel</button>
+                                <button onClick={validate} className="btn btn-primary col-5" type="button" id="addBtn" ><i class="fa fa-plus"></i> Add</button>
                             </>
                         }
                     </div>

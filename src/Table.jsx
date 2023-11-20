@@ -26,10 +26,6 @@ export const Table = () => {
 
     const handleEditRow = (idx) => {
         setRowToEdit(idx);
-        // const desc = document.getElementById('Description');
-        //const date = document.getElementById('date');
-        //var priority = document.getElementById('priority');;
-
         openModal();
     };
 
@@ -50,6 +46,7 @@ export const Table = () => {
             };
             setRows(updatedRows);
             toastr.success("Row has been successfully updated.");
+            setRowToEdit(null)
         }
     }
 
@@ -84,10 +81,21 @@ export const Table = () => {
         setEditing(false);
     };
 
+    const formatDate = (date) => {
+        let year = date.substring(0,4);
+        let monthIndex = date.indexOf("-")
+        let dayIndex = date.indexOf("-", 6)
+        let month = date.substring(monthIndex + 1, dayIndex)
+        let day = date.substring(dayIndex + 1)
+
+        return month + "/" + day + "/" + year;
+    }
+
     return <div>
         <div class="card">
-            <div class="card-header bg-primary text-white">Frameworks
-                <button onClick={openModal} class="btn btn-primary col-2">Add</button>
+            <div class="card-header bg-primary text-white">
+                <span id="frameworks"><i class="fa fa-bars"></i> Frameworks </span>
+                <button id="addButton" onClick={openModal} class="btn btn-primary col-2" ><i class="fa fa-plus"></i> Add</button>
             </div>
             <table>
                 <thead>
@@ -99,17 +107,18 @@ export const Table = () => {
                     <th>Action</th>
                 </thead>
                 <tbody>
+                    
                     {rows.map((row, index) => (
                         <tr key={index}>
                             <td>{row.title}</td>
                             <td>{row.description}</td>
-                            <td>{row.deadline}</td>
+                            <td>{formatDate(row.deadline)}</td>
                             <td>{row.priority}</td>
                             <td>{<input type="checkbox" name="isComplete" onChange={() => toggleIsComplete(index)}></input>}</td>
-                            <td>
-                                {!isCompleteState[index] && <button key="update" onClick={() => update(index)}>Update</button>}
+                            <td id="updateRemoveBtn">
+                                {!isCompleteState[index] && <button className="btn btn-primary" key="update" onClick={() => update(index)}><i class="fa fa-pencil"></i> Update</button>}
 
-                                <button key="remove" onClick={() => handleRemoveRow(index)}>Remove</button>
+                                <button key="remove" className="btn btn-danger" onClick={() => handleRemoveRow(index)}><i class="fa fa-ban"></i> Remove</button>
 
                             </td>
                         </tr>

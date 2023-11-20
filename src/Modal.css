@@ -35,6 +35,18 @@
     margin: auto;
 }
 
-.btn {
+#cancelButton {
+    float: right;
+}
+
+#addButton {
+    float: right;
+}
+
+#addBtn {
+    float: right;
+}
+
+#editButton {
     float: right;
 }
