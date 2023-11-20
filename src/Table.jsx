@@ -1,9 +1,9 @@
 import React from 'react';
 import { useState } from "react";
-import toastr from "toastr";
-import "toastr/build/toastr.min.css";
 import "./Table.css";
 import { Modal } from './Modal';
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
 
 toastr.options = {
     positionClass: 'toast-bottom-right',
@@ -13,19 +13,47 @@ toastr.options = {
 
 export const Table = () => {
     const [isModalOpen, setModalOpen] = useState(false);
-    const [isComplete, setIsComplete] = useState(false);
+    const [isCompleteState, setIsCompleteState] = useState([]);
     const [editing, setEditing] = useState(false);
     const [rowToEdit, setRowToEdit] = useState(null);
     const [rows, setRows] = useState([])
 
+    const toggleIsComplete = (index) => {
+        const updatedIsCompleteState = [...isCompleteState];
+        updatedIsCompleteState[index] = !updatedIsCompleteState[index];
+        setIsCompleteState(updatedIsCompleteState);
+    };
+
     const handleEditRow = (idx) => {
         setRowToEdit(idx);
+        // const desc = document.getElementById('Description');
+        //const date = document.getElementById('date');
+        //var priority = document.getElementById('priority');;
 
         openModal();
     };
 
+    const edit_helper = (data) => {
+
+        if (editing && rowToEdit !== null) {
+
+            // If editing, update the existing row
+            const updatedRows = [...rows];
+
+            updatedRows[rowToEdit] = {
+                ...updatedRows[rowToEdit],
+                description: data.description,
+                deadline: data.deadline,
+                priority: data.priority,
+
+                // Add other properties if needed
+            };
+            setRows(updatedRows);
+            toastr.success("Row has been successfully updated.");
+        }
+    }
+
     const handleRemoveRow = (index) => {
-        console.log(index)
         const updatedRows = [...rows];
         updatedRows.splice(index, 1);
         setRows(updatedRows);
@@ -37,14 +65,16 @@ export const Table = () => {
         setEditing(true);
     }
 
+    const addRows = (details) => {
 
-
-    const addRows = (details)=> {
-        
         rows.push(details);
         setRows(rows);
+
+        toastr.success("Task has been successfully added.")
+        closeModal();
+
     }
-    
+
     const openModal = () => {
         setModalOpen(true);
     };
@@ -57,40 +87,40 @@ export const Table = () => {
     return <div>
         <div class="card">
             <div class="card-header bg-primary text-white">Frameworks
-                <button onClick={openModal} class="btn btn-primary col-2"> Add</button>
+                <button onClick={openModal} class="btn btn-primary col-2">Add</button>
             </div>
-                <table>
-                    <thead>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>Deadline</th>
-                        <th>Priority</th>
-                        <th>Is Complete</th>
-                        <th>Action</th>
-                    </thead>
-                    <tbody>
-                        {rows.map((row, index) => (
-                            <tr key={index}>
-                                <td>{row.title}</td>
-                                <td>{row.description}</td>
-                                <td>{row.deadline}</td>
-                                <td>{row.priority}</td>
-                                <td>{row.isComplete}</td>
-                                <td>
-                                    {!isComplete && <button key="update" onClick={() => update(index)}>Update</button>}
-                                    
-                                    <button key="remove" onClick={() => handleRemoveRow(index)}>Remove</button>
-                                    
-                                </td>
-                            </tr>
-                        ))}
-                            
-                    </tbody>
-                </table>
+            <table>
+                <thead>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Deadline</th>
+                    <th>Priority</th>
+                    <th>Is Complete</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    {rows.map((row, index) => (
+                        <tr key={index}>
+                            <td>{row.title}</td>
+                            <td>{row.description}</td>
+                            <td>{row.deadline}</td>
+                            <td>{row.priority}</td>
+                            <td>{<input type="checkbox" name="isComplete" onChange={() => toggleIsComplete(index)}></input>}</td>
+                            <td>
+                                {!isCompleteState[index] && <button key="update" onClick={() => update(index)}>Update</button>}
+
+                                <button key="remove" onClick={() => handleRemoveRow(index)}>Remove</button>
+
+                            </td>
+                        </tr>
+                    ))}
+
+                </tbody>
+            </table>
         </div>
 
-        {isModalOpen && <Modal setRowToEdit={setRowToEdit} editing={editing} setEditing={setEditing} openModal={openModal} closeModal={closeModal} addRows={addRows} setIsComplete={setIsComplete} handleEditRow={handleEditRow} defaultValue={rowToEdit !== null && rows[rowToEdit]}/>}
-        
+        {isModalOpen && <Modal rows={rows} edit_helper={edit_helper} setRowToEdit={setRowToEdit} editing={editing} setEditing={setEditing} openModal={openModal} closeModal={closeModal} addRows={addRows} handleEditRow={handleEditRow} defaultValue={rowToEdit !== null && rows[rowToEdit]} />}
+
     </div>
-   
+
 }
